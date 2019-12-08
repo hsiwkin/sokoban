@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,16 +10,28 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Arrange();
+        var board1 = "board_1.txt";
+
+        LoadBoard(board1);
     }
 
-    private void Arrange()
+    private void LoadBoard(string boardName)
     {
-        for (int x = 0; x < size; ++x)
+        var boardPath = Path.Combine(Application.dataPath, "Boards", boardName);
+        var streamReader = new StreamReader(boardPath);
+        var fileContents = streamReader.ReadToEnd();
+        streamReader.Close();
+
+        var rows = fileContents.Split('\n');
+        System.Array.Reverse(rows);
+
+        for (int z = 0; z < rows.Length; ++z)
         {
-            for (int z = 0; z < size; ++z)
+            var row = rows[z].ToCharArray();
+
+            for (int x = 0; x < row.Length; ++x)
             {
-                CreateFloorBox(x, z);
+                CreateElement(row[x], x, z);
             }
         }
     }
