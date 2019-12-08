@@ -23,6 +23,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void CreateElement(char elementSign, float positionX, float positionZ)
+    {
+        switch (elementSign)
+        {
+            case '.':
+                CreateFloorBox(positionX, positionZ);
+                break;
+            default:
+                Debug.LogError("Unrecognized sign while reading the board");
+                break;
+        }
+    }
+
     private void CreateFloorBox(float positionX, float positionZ)
     {
         float boxSize = floorBox.transform.localScale.x;
