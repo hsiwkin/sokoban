@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject floorBox, crate;
+    public GameObject floorBox, crate, wall;
     private float elementSize = 1f;
 
     private void Awake()
@@ -81,13 +81,21 @@ public class GameManager : MonoBehaviour
 
     private void CreateWall(float positionX, float positionZ)
     {
-        // TODO
+        var wallInstance = Instantiate(
+            wall,
+            elementSize * new Vector3(positionX, .5f, positionZ),
+            Quaternion.identity
+        );
+
+
+        wallInstance.transform.localScale =
+            wallInstance.transform.localScale +
+            new Vector3(0, Random.Range(0.1f, 0.5f), 0);
     }
 
     private void CreateCrate(float positionX, float positionZ)
     {
-        // TODO
-        var crateInstance = Instantiate(
+        Instantiate(
             crate,
             elementSize * new Vector3(positionX, .5f, positionZ),
             Quaternion.identity
