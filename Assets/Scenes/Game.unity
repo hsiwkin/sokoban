@@ -325,6 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorBox: {fileID: 3935895701591465271, guid: da5eed665f0714b34bc07313a6ff9162,
     type: 3}
+  crate: {fileID: 4705462619860354368, guid: 635f2f8f50ec048e8bd6af0d9f4b9b15, type: 3}
   size: 10
 --- !u!4 &1414998559
 Transform:

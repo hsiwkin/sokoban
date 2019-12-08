@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject floorBox;
-    public int size = 10;
+    public GameObject floorBox, crate;
+    private float elementSize = 1f;
 
     private void Awake()
     {
@@ -43,6 +43,19 @@ public class GameManager : MonoBehaviour
             case '.':
                 CreateFloorBox(positionX, positionZ);
                 break;
+            case '#':
+                CreateWall(positionX, positionZ);
+                break;
+            case '@':
+                CreateFloorBox(positionX, positionZ);
+                CreateCrate(positionX, positionZ);
+                break;
+            case 'X':
+                CreateTargetLocation(positionX, positionZ);
+                break;
+            case '$':
+                CreatePlayer(positionX, positionZ);
+                break;
             default:
                 Debug.LogError("Unrecognized sign while reading the board");
                 break;
@@ -51,12 +64,12 @@ public class GameManager : MonoBehaviour
 
     private void CreateFloorBox(float positionX, float positionZ)
     {
-        float boxSize = floorBox.transform.localScale.x;
         var boxInstance = Instantiate(
             floorBox,
-            new Vector3(boxSize * positionX, 0, boxSize * positionZ),
+            new Vector3(elementSize* positionX, -0.5f * floorBox.transform.localScale.y, elementSize * positionZ),
             Quaternion.identity
         );
+
         var boxInstanceRenderer = boxInstance.GetComponent<Renderer>();
         var material = boxInstanceRenderer.material;
 
@@ -64,5 +77,30 @@ public class GameManager : MonoBehaviour
         Color.RGBToHSV(material.color, out hue, out saturation, out value);
 
         material.color = Random.ColorHSV(hue, hue, saturation, saturation, 0.85f, 1f);
+    }
+
+    private void CreateWall(float positionX, float positionZ)
+    {
+        // TODO
+    }
+
+    private void CreateCrate(float positionX, float positionZ)
+    {
+        // TODO
+        var crateInstance = Instantiate(
+            crate,
+            elementSize * new Vector3(positionX, .5f, positionZ),
+            Quaternion.identity
+        );
+    }
+
+    private void CreateTargetLocation(float positionX, float positionZ)
+    {
+        // TODO
+    }
+
+    private void CreatePlayer(float positionX, float positionZ)
+    {
+        // TODO
     }
 }
