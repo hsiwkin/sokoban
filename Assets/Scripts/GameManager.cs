@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject floorBox, crate, wall;
+    public GameObject floorBox, crate, wall, targetFloorBox;
     private float elementSize = 1f;
 
     private void Awake()
@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
         LoadBoard(board1);
     }
-
+    
     private void LoadBoard(string boardName)
     {
         var boardPath = Path.Combine(Application.dataPath, "Boards", boardName);
@@ -62,11 +62,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CreateFloorBox(float positionX, float positionZ)
+    private void CreateFloorElement(float positionX, float positionZ, GameObject prefab)
     {
         var boxInstance = Instantiate(
-            floorBox,
-            new Vector3(elementSize* positionX, -0.5f * floorBox.transform.localScale.y, elementSize * positionZ),
+            prefab,
+            new Vector3(elementSize * positionX, -0.5f * floorBox.transform.localScale.y, elementSize * positionZ),
             Quaternion.identity
         );
 
@@ -77,6 +77,16 @@ public class GameManager : MonoBehaviour
         Color.RGBToHSV(material.color, out hue, out saturation, out value);
 
         material.color = Random.ColorHSV(hue, hue, saturation, saturation, 0.85f, 1f);
+    }
+
+    private void CreateFloorBox(float positionX, float positionZ)
+    {
+        CreateFloorElement(positionX, positionZ, floorBox);
+    }
+
+    private void CreateTargetLocation(float positionX, float positionZ)
+    {
+        CreateFloorElement(positionX, positionZ, targetFloorBox);
     }
 
     private void CreateWall(float positionX, float positionZ)
@@ -100,11 +110,6 @@ public class GameManager : MonoBehaviour
             elementSize * new Vector3(positionX, .5f, positionZ),
             Quaternion.identity
         );
-    }
-
-    private void CreateTargetLocation(float positionX, float positionZ)
-    {
-        // TODO
     }
 
     private void CreatePlayer(float positionX, float positionZ)
