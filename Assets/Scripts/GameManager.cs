@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour
 
     private void CreatePlayer(float positionX, float positionZ)
     {
-        // TODO
         Instantiate(
             player,
             elementSize * new Vector3(positionX, 0, positionZ),

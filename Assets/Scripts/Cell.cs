@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+enum CellType
+{
+    Floor,
+    TargetSpot,
+    Wall
+}
+
 public class Cell : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    CellType type;
+    Transform item;
 }
