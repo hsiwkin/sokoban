@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float pushingSpeed = 8f;
 
     private Animator animator;
-    private bool isWalking = false;
+    private bool walking = false;
 
     private void Awake()
     {
@@ -24,41 +24,5 @@ public class PlayerMovement : MonoBehaviour
     {
         var horizontalInput = Input.GetAxis("Horizontal");
         var verticalInput = Input.GetAxis("Vertical");
-
-        RotatePlayer(horizontalInput, verticalInput);
-
-        if (Mathf.Abs(horizontalInput) > 0 || Mathf.Abs(verticalInput) > 0)
-        {
-            transform.Translate(
-             walkingSpeed * Time.deltaTime * new Vector3(horizontalInput, 0, Mathf.Abs(verticalInput)));
-            isWalking = true;
-        }
-        else
-        {
-            isWalking = false;
-        }
-
-        SetAnimatorVariables();
-    }
-
-    private void RotatePlayer(float horizontalInput, float verticalInput)
-    {
-        float rotation = Mathf.Abs(horizontalInput) > 0 ? Mathf.Sign(horizontalInput) * 90 : 0;
-
-        if (verticalInput < 0)
-        {
-            rotation = -180;
-        }
-
-        transform.localEulerAngles = new Vector3(
-            transform.localEulerAngles.x,
-            rotation,
-            transform.localEulerAngles.z
-        );
-    }
-
-    private void SetAnimatorVariables()
-    {
-        animator.SetBool("walking", isWalking);
     }
 }
