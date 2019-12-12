@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject floorBox, crate, wall, targetFloorBox;
+    public GameObject floorBox, crate, wall, targetFloorBox, player;
     private float elementSize = 1f;
 
     private void Awake()
@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
                 CreateTargetLocation(positionX, positionZ);
                 break;
             case '$':
+                CreateFloorBox(positionX, positionZ);
                 CreatePlayer(positionX, positionZ);
                 break;
             default:
@@ -115,5 +116,10 @@ public class GameManager : MonoBehaviour
     private void CreatePlayer(float positionX, float positionZ)
     {
         // TODO
+        Instantiate(
+            player,
+            elementSize * new Vector3(positionX, 0, positionZ),
+            Quaternion.identity
+        );
     }
 }
