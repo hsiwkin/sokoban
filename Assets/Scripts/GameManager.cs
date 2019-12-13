@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
     private GameState gameState;
 
     private bool performingAction = false;
-    
+    private Vector3Int targetPosition;
+    public float speed = 1.0f;
+
 
     private void Awake()
     {
@@ -33,6 +35,11 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         HandleInput();
+
+        if (performingAction)
+        {
+            PerformAction();
+        }
     }
 
     private void SetupCamera()
@@ -48,12 +55,15 @@ public class GameManager : MonoBehaviour
     {
         // TODO: it's a mock - implement it
 
-        var verticalInput = Input.GetAxis("Vertical");
-        var horizontalInput = Input.GetAxis("Horizontal");
-
-        if (Mathf.Abs(horizontalInput) > 0)
+        if (!performingAction)
         {
-            MoveRight();
+            var verticalInput = Input.GetAxis("Vertical");
+            var horizontalInput = Input.GetAxis("Horizontal");
+
+            if (Mathf.Abs(horizontalInput) > 0)
+            {
+                MoveRight();
+            }
         }
     }
 
@@ -64,12 +74,28 @@ public class GameManager : MonoBehaviour
         var width = position[1];
         var height = position[0];
 
-        Debug.Log("target width: " + (width + 1));
-        Debug.Log("target height: " + height);
+        targetPosition = new Vector3Int(width + 1, 0, height);
 
+        //Debug.Log("target width: " + (width + 1));
+        //Debug.Log("target height: " + height);
 
-        
+        PerformAction();
+    }
 
-        performingAction = false;
+    private void PerformAction()
+    {
+        float step = speed * Time.deltaTime;
+        var playerInstance = gameState.mapData[gameState.playerPosition[0], gameState.playerPosition[1]].item;
+
+        playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position, targetPosition, step);
+
+        Debug.Log("player: " + playerInstance.transform.position);
+        Debug.Log("target: " + targetPosition);
+
+        if (Vector3.Distance(playerInstance.transform.position, targetPosition) < 0.001f)
+        {
+            performingAction = false;
+            Debug.Log("DONE!!!");
+        }
     }
 }

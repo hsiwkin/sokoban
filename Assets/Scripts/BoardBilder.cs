@@ -7,7 +7,6 @@ public class BoardBilder
 {
     public GameObject floorBox, crate, wall, targetFloorBox, player;
     public GameManager gameManager;
-    private float elementSize = 1f;
     private GameState gameState;
 
     public void Run(string boardName, GameState gameState)
@@ -80,7 +79,7 @@ public class BoardBilder
         
         var boxInstance = Object.Instantiate(
             prefab,
-            new Vector3(elementSize * width, -0.5f * floorBox.transform.localScale.y, elementSize * height),
+            new Vector3(width, -0.5f * floorBox.transform.localScale.y, height),
             Quaternion.identity
         );
 
@@ -90,7 +89,8 @@ public class BoardBilder
         float hue, saturation, value;
         Color.RGBToHSV(material.color, out hue, out saturation, out value);
 
-        material.color = Random.ColorHSV(hue, hue, saturation, saturation, 0.85f, 1f);
+        material.color = Random.ColorHSV(
+            hue, hue, saturation, saturation, 0.85f, 1f);
 
         return boxInstance;
     }
@@ -109,7 +109,7 @@ public class BoardBilder
     {
         var wallInstance = Object.Instantiate(
             wall,
-            elementSize * new Vector3(width, .5f, height),
+            new Vector3(width, .5f, height),
             Quaternion.identity
         );
 
@@ -125,7 +125,7 @@ public class BoardBilder
     {
         return Object.Instantiate(
             crate,
-            elementSize * new Vector3(width, .5f, height),
+            new Vector3(width, .5f, height),
             Quaternion.identity
         );
     }
@@ -134,7 +134,7 @@ public class BoardBilder
     {
         return Object.Instantiate(
             player,
-            elementSize * new Vector3(width, 0, height),
+            new Vector3(width, 0, height),
             Quaternion.identity
         );
     }

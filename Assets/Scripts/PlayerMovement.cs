@@ -16,4 +16,9 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
+
+    //public void MoveRight(Vector3Int target)
+    //{
+
+    //}
 }
