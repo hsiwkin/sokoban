@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameState : MonoBehaviour
+public class GameState
 {
     public Vector2Int playerPosition;
     public Vector2Int mapSize;

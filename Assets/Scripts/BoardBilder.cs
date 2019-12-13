@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class BoardBilder : MonoBehaviour
+public class BoardBilder
 {
     public GameObject floorBox, crate, wall, targetFloorBox, player;
+    public GameManager gameManager;
     private float elementSize = 1f;
     private GameState gameState;
 
@@ -66,7 +67,8 @@ public class BoardBilder : MonoBehaviour
 
     private void CreateFloorElement(float positionX, float positionZ, GameObject prefab)
     {
-        var boxInstance = Instantiate(
+        
+        var boxInstance = Object.Instantiate(
             prefab,
             new Vector3(elementSize * positionX, -0.5f * floorBox.transform.localScale.y, elementSize * positionZ),
             Quaternion.identity
@@ -93,7 +95,7 @@ public class BoardBilder : MonoBehaviour
 
     private void CreateWall(float positionX, float positionZ)
     {
-        var wallInstance = Instantiate(
+        var wallInstance = Object.Instantiate(
             wall,
             elementSize * new Vector3(positionX, .5f, positionZ),
             Quaternion.identity
@@ -107,7 +109,7 @@ public class BoardBilder : MonoBehaviour
 
     private void CreateCrate(float positionX, float positionZ)
     {
-        Instantiate(
+        Object.Instantiate(
             crate,
             elementSize * new Vector3(positionX, .5f, positionZ),
             Quaternion.identity
@@ -116,7 +118,7 @@ public class BoardBilder : MonoBehaviour
 
     private void CreatePlayer(float positionX, float positionZ)
     {
-        Instantiate(
+        Object.Instantiate(
             player,
             elementSize * new Vector3(positionX, 0, positionZ),
             Quaternion.identity

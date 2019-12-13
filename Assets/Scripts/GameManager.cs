@@ -20,7 +20,8 @@ public class GameManager : MonoBehaviour
             crate = crate,
             wall = wall,
             targetFloorBox = targetFloorBox,
-            player = player
+            player = player,
+            gameManager = this
         }.Run(board1, gameState);
     }
     
