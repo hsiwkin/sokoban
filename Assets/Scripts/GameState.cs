@@ -22,16 +22,16 @@ public class GameState
         }
     }
 
-    public Cell this[int x, int y]
+    public Cell this[int height, int width]
     {
         get
         {
-            return mapData[x, y];
+            return mapData[height, width];
         }
 
         set
         {
-            mapData[x, y] = value;
+            mapData[height, width] = value;
         }
     }
 

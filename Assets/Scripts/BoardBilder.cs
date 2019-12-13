@@ -38,7 +38,7 @@ public class BoardBilder
         }
     }
 
-    private void CreateElement(char elementSign, float positionX, float positionZ)
+    private void CreateElement(char elementSign, int positionX, int positionZ)
     {
         switch (elementSign)
         {
@@ -65,7 +65,7 @@ public class BoardBilder
         }
     }
 
-    private void CreateFloorElement(float positionX, float positionZ, GameObject prefab)
+    private void CreateFloorElement(int positionX, int positionZ, GameObject prefab)
     {
         
         var boxInstance = Object.Instantiate(
@@ -83,17 +83,17 @@ public class BoardBilder
         material.color = Random.ColorHSV(hue, hue, saturation, saturation, 0.85f, 1f);
     }
 
-    private void CreateFloorBox(float positionX, float positionZ)
+    private void CreateFloorBox(int positionX, int positionZ)
     {
         CreateFloorElement(positionX, positionZ, floorBox);
     }
 
-    private void CreateTargetLocation(float positionX, float positionZ)
+    private void CreateTargetLocation(int positionX, int positionZ)
     {
         CreateFloorElement(positionX, positionZ, targetFloorBox);
     }
 
-    private void CreateWall(float positionX, float positionZ)
+    private void CreateWall(int positionX, int positionZ)
     {
         var wallInstance = Object.Instantiate(
             wall,
@@ -107,7 +107,7 @@ public class BoardBilder
             new Vector3(0, Random.Range(0.1f, 0.5f), 0);
     }
 
-    private void CreateCrate(float positionX, float positionZ)
+    private void CreateCrate(int positionX, int positionZ)
     {
         Object.Instantiate(
             crate,
@@ -116,7 +116,7 @@ public class BoardBilder
         );
     }
 
-    private void CreatePlayer(float positionX, float positionZ)
+    private void CreatePlayer(int positionX, int positionZ)
     {
         Object.Instantiate(
             player,
