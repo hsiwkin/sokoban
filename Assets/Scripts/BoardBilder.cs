@@ -27,37 +27,37 @@ public class BoardBilder
         int columnsCount = rowsCount > 0 ? rows[0].Length : 0;
         this.gameState.mapSize = new Vector2Int(rowsCount, columnsCount);
 
-        for (int z = 0; z < rows.Length; ++z)
+        for (int height = 0; height < rows.Length; ++height)
         {
-            var row = rows[z].ToCharArray();
+            var row = rows[height].ToCharArray();
 
-            for (int x = 0; x < row.Length; ++x)
+            for (int width = 0; width < row.Length; ++width)
             {
-                CreateElement(row[x], x, z);
+                CreateElement(row[width], width, height);
             }
         }
     }
 
-    private void CreateElement(char elementSign, int positionX, int positionZ)
+    private void CreateElement(char elementSign, int width, int height)
     {
         switch (elementSign)
         {
             case '.':
-                CreateFloorBox(positionX, positionZ);
+                CreateFloorBox(width, height);
                 break;
             case '#':
-                CreateWall(positionX, positionZ);
+                CreateWall(width, height);
                 break;
             case '@':
-                CreateFloorBox(positionX, positionZ);
-                CreateCrate(positionX, positionZ);
+                CreateFloorBox(width, height);
+                CreateCrate(width, height);
                 break;
             case 'X':
-                CreateTargetLocation(positionX, positionZ);
+                CreateTargetLocation(width, height);
                 break;
             case '$':
-                CreateFloorBox(positionX, positionZ);
-                CreatePlayer(positionX, positionZ);
+                CreateFloorBox(width, height);
+                CreatePlayer(width, height);
                 break;
             default:
                 Debug.LogError("Unrecognized sign while reading the board");
@@ -65,12 +65,12 @@ public class BoardBilder
         }
     }
 
-    private void CreateFloorElement(int positionX, int positionZ, GameObject prefab)
+    private void CreateFloorElement(int width, int height, GameObject prefab)
     {
         
         var boxInstance = Object.Instantiate(
             prefab,
-            new Vector3(elementSize * positionX, -0.5f * floorBox.transform.localScale.y, elementSize * positionZ),
+            new Vector3(elementSize * width, -0.5f * floorBox.transform.localScale.y, elementSize * height),
             Quaternion.identity
         );
 
@@ -83,21 +83,21 @@ public class BoardBilder
         material.color = Random.ColorHSV(hue, hue, saturation, saturation, 0.85f, 1f);
     }
 
-    private void CreateFloorBox(int positionX, int positionZ)
+    private void CreateFloorBox(int width, int height)
     {
-        CreateFloorElement(positionX, positionZ, floorBox);
+        CreateFloorElement(width, height, floorBox);
     }
 
-    private void CreateTargetLocation(int positionX, int positionZ)
+    private void CreateTargetLocation(int width, int height)
     {
-        CreateFloorElement(positionX, positionZ, targetFloorBox);
+        CreateFloorElement(width, height, targetFloorBox);
     }
 
-    private void CreateWall(int positionX, int positionZ)
+    private void CreateWall(int width, int height)
     {
         var wallInstance = Object.Instantiate(
             wall,
-            elementSize * new Vector3(positionX, .5f, positionZ),
+            elementSize * new Vector3(width, .5f, height),
             Quaternion.identity
         );
 
@@ -107,20 +107,20 @@ public class BoardBilder
             new Vector3(0, Random.Range(0.1f, 0.5f), 0);
     }
 
-    private void CreateCrate(int positionX, int positionZ)
+    private void CreateCrate(int width, int height)
     {
         Object.Instantiate(
             crate,
-            elementSize * new Vector3(positionX, .5f, positionZ),
+            elementSize * new Vector3(width, .5f, height),
             Quaternion.identity
         );
     }
 
-    private void CreatePlayer(int positionX, int positionZ)
+    private void CreatePlayer(int width, int height)
     {
         Object.Instantiate(
             player,
-            elementSize * new Vector3(positionX, 0, positionZ),
+            elementSize * new Vector3(width, 0, height),
             Quaternion.identity
         );
     }
