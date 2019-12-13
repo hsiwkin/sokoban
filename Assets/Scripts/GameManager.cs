@@ -6,11 +6,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject floorBox, crate, wall, targetFloorBox, player;
+    private GameState gameState;
     
 
     private void Awake()
     {
         var board1 = "board_1.txt";
+        gameState = new GameState();
 
         new BoardBilder
         {
@@ -19,7 +21,7 @@ public class GameManager : MonoBehaviour
             wall = wall,
             targetFloorBox = targetFloorBox,
             player = player
-        }.Run(board1);
+        }.Run(board1, gameState);
     }
     
     

@@ -7,9 +7,12 @@ public class BoardBilder : MonoBehaviour
 {
     public GameObject floorBox, crate, wall, targetFloorBox, player;
     private float elementSize = 1f;
+    private GameState gameState;
 
-    public void Run(string boardName)
+    public void Run(string boardName, GameState gameState)
     {
+        this.gameState = gameState;
+
         var boardPath = Path.Combine(Application.dataPath, "Boards", boardName);
         var streamReader = new StreamReader(boardPath);
         var fileContents = streamReader.ReadToEnd();
@@ -17,6 +20,11 @@ public class BoardBilder : MonoBehaviour
 
         var rows = fileContents.Split('\n');
         System.Array.Reverse(rows);
+
+        // TODO: handle rowsCount = 0 || columnsCount = 0 scenario
+        int rowsCount = rows.Length;
+        int columnsCount = rowsCount > 0 ? rows[0].Length : 0;
+        this.gameState.mapSize = new Vector2Int(rowsCount, columnsCount);
 
         for (int z = 0; z < rows.Length; ++z)
         {
