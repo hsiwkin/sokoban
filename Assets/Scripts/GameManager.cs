@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject floorBox, crate, wall, targetFloorBox, player;
+    public Transform mainCamera;
     private GameState gameState;
     
 
@@ -23,7 +24,16 @@ public class GameManager : MonoBehaviour
             player = player,
             gameManager = this
         }.Run(board1, gameState);
+
+        SetupCamera();
     }
     
-    
+    private void SetupCamera()
+    {
+        mainCamera.transform.position = new Vector3(
+            gameState.MapSize[1] / 2,
+            mainCamera.transform.position.y,
+            gameState.MapSize[0] / 2
+        );
+    }
 }
