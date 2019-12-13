@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
 
     private bool performingAction = false;
     private Vector3Int targetPosition;
-    public float speed = 1.0f;
 
 
     private void Awake()
@@ -34,11 +33,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        HandleInput();
-
-        if (performingAction)
+        if (!performingAction)
         {
-            PerformAction();
+            HandleInput();
         }
     }
 
@@ -55,47 +52,36 @@ public class GameManager : MonoBehaviour
     {
         // TODO: it's a mock - implement it
 
-        if (!performingAction)
-        {
-            var verticalInput = Input.GetAxis("Vertical");
-            var horizontalInput = Input.GetAxis("Horizontal");
+        var verticalInput = Input.GetAxis("Vertical");
+        var horizontalInput = Input.GetAxis("Horizontal");
 
-            if (Mathf.Abs(horizontalInput) > 0)
-            {
-                MoveRight();
-            }
+        if (Mathf.Abs(horizontalInput) > 0)
+        {
+            MoveRight();
         }
     }
 
     private void MoveRight()
     {
         performingAction = true;
+
         var position = gameState.playerPosition;
         var width = position[1];
         var height = position[0];
 
         targetPosition = new Vector3Int(width + 1, 0, height);
 
-        //Debug.Log("target width: " + (width + 1));
-        //Debug.Log("target height: " + height);
+        var playerInstance = gameState
+            .mapData[
+                gameState.playerPosition[0],
+                gameState.playerPosition[1]
+            ].item;
+        var playerMovementComponent = playerInstance
+            .GetComponent<PlayerMovement>();
 
-        PerformAction();
-    }
+        playerMovementComponent.MovementFinish +=
+            (object source, System.EventArgs args) => performingAction = false;
 
-    private void PerformAction()
-    {
-        float step = speed * Time.deltaTime;
-        var playerInstance = gameState.mapData[gameState.playerPosition[0], gameState.playerPosition[1]].item;
-
-        playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position, targetPosition, step);
-
-        Debug.Log("player: " + playerInstance.transform.position);
-        Debug.Log("target: " + targetPosition);
-
-        if (Vector3.Distance(playerInstance.transform.position, targetPosition) < 0.001f)
-        {
-            performingAction = false;
-            Debug.Log("DONE!!!");
-        }
+        playerMovementComponent.StartMovement(targetPosition);
     }
 }
