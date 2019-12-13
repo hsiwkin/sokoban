@@ -3,5 +3,7 @@ public enum CellType
 {
     Floor,
     TargetSpot,
-    Wall
+    Wall,
+    Player,
+    Crate
 }

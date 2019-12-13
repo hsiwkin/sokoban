@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Cell
 {
-    CellType type;
-    Transform item;
+    public CellType type;
+    public GameObject item;
 }

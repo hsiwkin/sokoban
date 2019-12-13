@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GameState
 {
-    public Vector2Int playerPosition;
-    public Vector2Int mapSize;
+    public Vector2Int playerPosition; // (height, width)
+    private Vector2Int mapSize;
     public Cell[,] mapData;
 
-    Vector2Int MapSize
+    public Vector2Int MapSize
     {
         get
         {

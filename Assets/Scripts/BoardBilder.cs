@@ -25,7 +25,7 @@ public class BoardBilder
         // TODO: handle rowsCount = 0 || columnsCount = 0 scenario
         int rowsCount = rows.Length;
         int columnsCount = rowsCount > 0 ? rows[0].Length : 0;
-        this.gameState.mapSize = new Vector2Int(rowsCount, columnsCount);
+        this.gameState.MapSize = new Vector2Int(rowsCount, columnsCount);
 
         for (int height = 0; height < rows.Length; ++height)
         {
@@ -40,32 +40,42 @@ public class BoardBilder
 
     private void CreateElement(char elementSign, int width, int height)
     {
+        var cell = new Cell();
         switch (elementSign)
         {
             case '.':
                 CreateFloorBox(width, height);
+                cell.type = CellType.Floor; 
                 break;
             case '#':
                 CreateWall(width, height);
+                cell.type = CellType.Wall;
                 break;
             case '@':
                 CreateFloorBox(width, height);
-                CreateCrate(width, height);
+                var crateInstance = CreateCrate(width, height);
+                cell.type = CellType.Crate;
+                cell.item = crateInstance;
                 break;
             case 'X':
                 CreateTargetLocation(width, height);
+                cell.type = CellType.TargetSpot;
                 break;
             case '$':
                 CreateFloorBox(width, height);
-                CreatePlayer(width, height);
+                var playerInstance = CreatePlayer(width, height);
+                cell.type = CellType.Player;
+                cell.item = playerInstance;
+                gameState.playerPosition = new Vector2Int(height, width);
                 break;
             default:
                 Debug.LogError("Unrecognized sign while reading the board");
                 break;
         }
+        gameState[height, width] = cell;
     }
 
-    private void CreateFloorElement(int width, int height, GameObject prefab)
+    private GameObject CreateFloorElement(int width, int height, GameObject prefab)
     {
         
         var boxInstance = Object.Instantiate(
@@ -81,19 +91,21 @@ public class BoardBilder
         Color.RGBToHSV(material.color, out hue, out saturation, out value);
 
         material.color = Random.ColorHSV(hue, hue, saturation, saturation, 0.85f, 1f);
+
+        return boxInstance;
     }
 
-    private void CreateFloorBox(int width, int height)
+    private GameObject CreateFloorBox(int width, int height)
     {
-        CreateFloorElement(width, height, floorBox);
+        return CreateFloorElement(width, height, floorBox);
     }
 
-    private void CreateTargetLocation(int width, int height)
+    private GameObject CreateTargetLocation(int width, int height)
     {
-        CreateFloorElement(width, height, targetFloorBox);
+        return CreateFloorElement(width, height, targetFloorBox);
     }
 
-    private void CreateWall(int width, int height)
+    private GameObject CreateWall(int width, int height)
     {
         var wallInstance = Object.Instantiate(
             wall,
@@ -105,20 +117,22 @@ public class BoardBilder
         wallInstance.transform.localScale =
             wallInstance.transform.localScale +
             new Vector3(0, Random.Range(0.1f, 0.5f), 0);
+
+        return wallInstance;
     }
 
-    private void CreateCrate(int width, int height)
+    private GameObject CreateCrate(int width, int height)
     {
-        Object.Instantiate(
+        return Object.Instantiate(
             crate,
             elementSize * new Vector3(width, .5f, height),
             Quaternion.identity
         );
     }
 
-    private void CreatePlayer(int width, int height)
+    private GameObject CreatePlayer(int width, int height)
     {
-        Object.Instantiate(
+        return Object.Instantiate(
             player,
             elementSize * new Vector3(width, 0, height),
             Quaternion.identity
