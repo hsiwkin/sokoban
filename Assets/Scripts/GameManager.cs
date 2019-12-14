@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Move(Vector3Int target, string activityType)
+    private void MovePlayer(Vector3Int target, string activityType)
     {
         performingAction = true;
         
@@ -73,6 +73,24 @@ public class GameManager : MonoBehaviour
             (object source, System.EventArgs args) => performingAction = false;
 
         playerMovementComponent.StartMovement(target, activityType);
+    }
+
+    private void MoveCrate(Vector3Int target, Vector3Int nextCellPosition)
+    {
+        // move crate
+        var crateInstance = gameState.mapData[target.z, target.x].item;
+        var crateMovement = crateInstance.GetComponent<CrateMovement>();
+
+        crateMovement.StartMovement(new Vector2Int(
+            nextCellPosition.z, nextCellPosition.x
+        ));
+
+        // update gameStatus with new crate's position
+        gameState.mapData[nextCellPosition.z, nextCellPosition.x].item = crateInstance;
+        gameState.mapData[nextCellPosition.z, nextCellPosition.x].type = CellType.Crate;
+
+        gameState.mapData[target.z, target.x].item = null;
+        gameState.mapData[target.z, target.x].type = CellType.Floor;
     }
 
     private Vector3Int? GetNewTargetField()
@@ -130,7 +148,7 @@ public class GameManager : MonoBehaviour
         // Free space
         if (targetType == CellType.Floor || targetType == CellType.TargetSpot)
         {
-            Move(target, "walking");
+            MovePlayer(target, "walking");
         } else if (targetType == CellType.Crate)
         {
             Vector3Int playerPosition = new Vector3Int(
@@ -146,16 +164,8 @@ public class GameManager : MonoBehaviour
 
             if (nextCellType == CellType.Floor || nextCellType == CellType.TargetSpot)
             {
-                // move crate
-                var crateInstance = gameState.mapData[target.z, target.x].item;
-                var crateMovement = crateInstance.GetComponent<CrateMovement>();
-
-                crateMovement.StartMovement(new Vector2Int(
-                    nextPosition.z, nextPosition.x
-                ));
-
-                // move player
-                Move(target, "pushing");
+                MoveCrate(target, nextPosition);
+                MovePlayer(target, "pushing");
             }
         }
     }

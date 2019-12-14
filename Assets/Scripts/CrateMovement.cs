@@ -28,7 +28,6 @@ public class CrateMovement : MonoBehaviour
             target[0]
         );
 
-        Debug.Log("target: " + this.target);
         performingAction = true;
     }
 
