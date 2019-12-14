@@ -24,8 +24,8 @@ public class CameraController : MonoBehaviour
         );
 
         transform.position = smoothedPosition;
-        transform.LookAt(getPlayer().transform);
-        //transform.eulerAngles = rotation;
+        //transform.LookAt(getPlayer().transform);
+        transform.eulerAngles = rotation;
     }
 
     private GameObject getPlayer()

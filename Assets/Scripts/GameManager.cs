@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     private void MovePlayer(Vector3Int target, string activityType)
     {
+        gameState.TotalMovesCount++;
+
         performingAction = true;
         
         var playerInstance = gameState
@@ -64,8 +66,10 @@ public class GameManager : MonoBehaviour
         playerMovementComponent.StartMovement(target, activityType);
     }
 
-    private void MoveCrate(Vector3Int target, Vector3Int nextCellPosition)
+    private void MoveCrate(Vector3Int target, Vector3Int nextCellPosition, bool final)
     {
+        gameState.PushesCount++;
+
         // move crate
         var crateInstance = gameState.mapData[target.z, target.x].item;
         var crateMovement = crateInstance.GetComponent<CrateMovement>();
@@ -80,6 +84,13 @@ public class GameManager : MonoBehaviour
 
         gameState.mapData[target.z, target.x].item = null;
         gameState.mapData[target.z, target.x].type = CellType.Floor;
+
+        if (final)
+        {
+            gameState.PlacedCratesCount++;
+            // make in unmovable
+            gameState.mapData[nextCellPosition.z, nextCellPosition.x].type = CellType.Wall;
+        }
     }
 
     private Vector3Int? GetNewTargetField()
@@ -153,7 +164,7 @@ public class GameManager : MonoBehaviour
 
             if (nextCellType == CellType.Floor || nextCellType == CellType.TargetSpot)
             {
-                MoveCrate(target, nextPosition);
+                MoveCrate(target, nextPosition, nextCellType == CellType.TargetSpot);
                 MovePlayer(target, "pushing");
             }
         }
