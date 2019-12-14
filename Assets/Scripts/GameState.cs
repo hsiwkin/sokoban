@@ -13,7 +13,7 @@ public class GameState
     public int TotalCratesCount { get; set; }
     public int PlacedCratesCount { get; set; }
 
-    private static readonly GameState instance = new GameState();
+    private static GameState instance = new GameState();
 
     static GameState() {}
 
@@ -25,6 +25,11 @@ public class GameState
         {
             return instance;
         }
+    }
+
+    public static void Reload()
+    {
+        instance = new GameState();
     }
 
     public Vector2Int MapSize

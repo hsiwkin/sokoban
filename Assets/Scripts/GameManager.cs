@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +33,10 @@ public class GameManager : MonoBehaviour
         if (!performingAction)
         {
             HandleInput();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ReloadGame();
         }
     }
 
@@ -184,5 +189,12 @@ public class GameManager : MonoBehaviour
             ].item;
 
         playerInstance.GetComponentInChildren<Animator>().SetBool("dancing", true);
+    }
+
+    private void ReloadGame()
+    {
+        GameState.Reload();
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
     }
 }
