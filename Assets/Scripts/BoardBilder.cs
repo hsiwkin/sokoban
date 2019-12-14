@@ -21,7 +21,6 @@ public class BoardBilder
         var rows = fileContents.Split('\n');
         System.Array.Reverse(rows);
 
-        // TODO: handle rowsCount = 0 || columnsCount = 0 scenario
         int rowsCount = rows.Length;
         int columnsCount = rowsCount > 0 ? rows[0].Length : 0;
         this.gameState.MapSize = new Vector2Int(rowsCount, columnsCount);
@@ -123,6 +122,8 @@ public class BoardBilder
 
     private GameObject CreateCrate(int width, int height)
     {
+        gameState.TotalCratesCount++;
+
         return Object.Instantiate(
             crate,
             new Vector3(width, .5f, height),
