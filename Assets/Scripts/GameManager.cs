@@ -90,6 +90,11 @@ public class GameManager : MonoBehaviour
             gameState.PlacedCratesCount++;
             // make in unmovable
             gameState.mapData[nextCellPosition.z, nextCellPosition.x].type = CellType.Wall;
+
+            if (gameState.PlacedCratesCount == gameState.TotalCratesCount)
+            {
+                EndGame();
+            }
         }
     }
 
@@ -168,5 +173,16 @@ public class GameManager : MonoBehaviour
                 MovePlayer(target, "pushing");
             }
         }
+    }
+
+    private void EndGame()
+    {
+        var playerInstance = gameState
+            .mapData[
+                gameState.playerPosition[0],
+                gameState.playerPosition[1]
+            ].item;
+
+        playerInstance.GetComponentInChildren<Animator>().SetBool("dancing", true);
     }
 }
