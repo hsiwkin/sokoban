@@ -50,14 +50,15 @@ public class GameManager : MonoBehaviour
     {
         if (AnyInput())
         {
-            Move();
+            Vector3Int target = GetNewTargetField();
+            Move(target);
         }
     }
 
-    private void Move()
+    private void Move(Vector3Int target)
     {
         performingAction = true;
-        Vector3Int target = GetNewTargetField();
+        
         var playerInstance = gameState
             .mapData[
                 gameState.playerPosition[0],
