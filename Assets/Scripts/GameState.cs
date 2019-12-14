@@ -8,6 +8,20 @@ public class GameState
     private Vector2Int mapSize;
     public Cell[,] mapData;
 
+    private static readonly GameState instance = new GameState();
+
+    static GameState() {}
+
+    private GameState() {}
+
+    public static GameState Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
     public Vector2Int MapSize
     {
         get

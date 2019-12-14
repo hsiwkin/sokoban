@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         var board1 = "board_1.txt";
-        gameState = new GameState();
+        gameState = GameState.Instance;
 
         new BoardBilder
         {
@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
             player = player,
             gameManager = this
         }.Run(board1, gameState);
-
-        SetupCamera();
     }
 
     private void Update()
@@ -35,15 +33,6 @@ public class GameManager : MonoBehaviour
         {
             HandleInput();
         }
-    }
-
-    private void SetupCamera()
-    {
-        mainCamera.transform.position = new Vector3(
-            gameState.MapSize[1] / 2, // height
-            mainCamera.transform.position.y,
-            gameState.MapSize[0] / 2 // width
-        );
     }
 
     private void HandleInput()
