@@ -8,6 +8,11 @@ public class GameState
     private Vector2Int mapSize;
     public Cell[,] mapData;
 
+    public int TotalMovesCount { get; set; }
+    public int PushesCount { get; set; }
+    public int TotalCratesCount { get; set; }
+    public int PlacedCratesCount { get; set; }
+
     private static readonly GameState instance = new GameState();
 
     static GameState() {}
