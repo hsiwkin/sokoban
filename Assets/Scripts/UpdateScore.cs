@@ -7,6 +7,7 @@ public class UpdateScore : MonoBehaviour
 {
     public TextMeshProUGUI crates;
     public TextMeshProUGUI moves;
+    public TextMeshProUGUI info;
     public GameState gameState;
 
 
@@ -19,5 +20,10 @@ public class UpdateScore : MonoBehaviour
     {
         crates.text = $"{gameState.PlacedCratesCount}/{gameState.TotalCratesCount} crates";
         moves.text = $"{gameState.PushesCount}/{gameState.TotalMovesCount} moves";
+
+        if (gameState.PlacedCratesCount == gameState.TotalCratesCount)
+        {
+            info.text = "YOU'VE WON! - press ECS to restart";
+        }
     }
 }
