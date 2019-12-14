@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
     private GameState gameState;
 
     private bool performingAction = false;
-    private Vector3Int targetPosition;
-
 
     private void Awake()
     {
@@ -42,35 +40,24 @@ public class GameManager : MonoBehaviour
     private void SetupCamera()
     {
         mainCamera.transform.position = new Vector3(
-            gameState.MapSize[1] / 2,
+            gameState.MapSize[1] / 2, // height
             mainCamera.transform.position.y,
-            gameState.MapSize[0] / 2
+            gameState.MapSize[0] / 2 // width
         );
     }
 
     private void HandleInput()
     {
-        // TODO: it's a mock - implement it
-
-        var verticalInput = Input.GetAxis("Vertical");
-        var horizontalInput = Input.GetAxis("Horizontal");
-
-        if (Mathf.Abs(horizontalInput) > 0)
+        if (AnyInput())
         {
-            MoveRight();
+            Move();
         }
     }
 
-    private void MoveRight()
+    private void Move()
     {
         performingAction = true;
-
-        var position = gameState.playerPosition;
-        var width = position[1];
-        var height = position[0];
-
-        targetPosition = new Vector3Int(width + 1, 0, height);
-
+        Vector3Int target = GetNewTargetField();
         var playerInstance = gameState
             .mapData[
                 gameState.playerPosition[0],
@@ -78,10 +65,53 @@ public class GameManager : MonoBehaviour
             ].item;
         var playerMovementComponent = playerInstance
             .GetComponent<PlayerMovement>();
+        UpdatePlayerPosition(target);
 
         playerMovementComponent.MovementFinish +=
             (object source, System.EventArgs args) => performingAction = false;
 
-        playerMovementComponent.StartMovement(targetPosition);
+        playerMovementComponent.StartMovement(target);
+    }
+
+    private Vector3Int GetNewTargetField()
+    {
+        var verticalInput = Input.GetAxis("Vertical");
+        var horizontalInput = Input.GetAxis("Horizontal");
+
+        return new Vector3Int(
+            gameState.playerPosition[1] + System.Math.Sign(horizontalInput),
+            0,
+            gameState.playerPosition[0] + System.Math.Sign(verticalInput)
+        );
+    }
+
+    private bool AnyInput()
+    {
+        return System.Math.Abs(Input.GetAxis("Vertical")) > Mathf.Epsilon ||
+            Mathf.Abs(Input.GetAxis("Horizontal")) > Mathf.Epsilon;
+    }
+
+    private void UpdatePlayerPosition(Vector3Int target)
+    {
+        var oldField = gameState
+            .mapData[
+                gameState.playerPosition[0],
+                gameState.playerPosition[1]
+            ];
+
+        gameState.playerPosition = new Vector2Int(target.z, target.x);
+
+        var newField = gameState
+            .mapData[
+                gameState.playerPosition[0],
+                gameState.playerPosition[1]
+            ];
+
+        
+        newField.type = CellType.Player;
+        newField.item = oldField.item;
+
+        oldField.type = CellType.Floor;
+        oldField.item = null;
     }
 }
