@@ -22,9 +22,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        var horizontalInput = Input.GetAxis("Horizontal");
-        var verticalInput = Input.GetAxis("Vertical");
-
         if (performingAction)
         {
             Move();
@@ -36,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
         this.target = target;
         performingAction = true;
         animator.SetBool("walking", true);
+
+        RotatePlayer();
     }
 
     public void Move()
@@ -54,5 +53,32 @@ public class PlayerMovement : MonoBehaviour
     protected virtual void OnMovementFinish()
     {
         MovementFinish?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void RotatePlayer()
+    {
+        // horizontal movement
+        if (Mathf.Abs(transform.position.x - target.x) > 0)
+        {
+            float directionSign = -1 *
+                Mathf.Sign(transform.position.x - target.x);
+
+            transform.eulerAngles = new Vector3(
+                transform.eulerAngles.x,
+                directionSign * 90,
+                transform.eulerAngles.z
+            );
+        }
+        else // vertical movement
+        {
+            float directionSign = -1 *
+                Mathf.Sign(transform.position.x - target.x);
+
+            transform.eulerAngles = new Vector3(
+                transform.eulerAngles.x,
+                directionSign > 0 ? 0 : 180,
+                transform.eulerAngles.z
+            );
+        }
     }
 }
