@@ -9,16 +9,11 @@ public class BoardBilder
     public GameManager gameManager;
     private GameState gameState;
 
-    public void Run(string boardName, GameState gameState)
+    public void Run(string board, GameState gameState)
     {
         this.gameState = gameState;
 
-        var boardPath = Path.Combine(Application.dataPath, "Boards", boardName);
-        var streamReader = new StreamReader(boardPath);
-        var fileContents = streamReader.ReadToEnd();
-        streamReader.Close();
-
-        var rows = fileContents.Split('\n');
+        var rows = board.Split('\n');
         System.Array.Reverse(rows);
 
         int rowsCount = rows.Length;

@@ -567,6 +567,7 @@ MonoBehaviour:
   targetFloorBox: {fileID: 3935895701591465271, guid: 5092b937e9c61c346a9d71ed6dfb3bba,
     type: 3}
   player: {fileID: 3887052090219867121, guid: d7994489efffd41698e7d308f6f0763d, type: 3}
+  board: {fileID: 4900000, guid: 7fb434bd4799b4de4b9ef0142625e5b4, type: 3}
   mainCamera: {fileID: 963194228}
 --- !u!4 &1414998559
 Transform:

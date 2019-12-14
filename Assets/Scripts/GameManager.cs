@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject floorBox, crate, wall, targetFloorBox, player;
+    public TextAsset board;
     public Transform mainCamera;
     private GameState gameState;
 
@@ -14,7 +15,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        var board1 = "board_1.txt";
         gameState = GameState.Instance;
 
         new BoardBilder
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
             targetFloorBox = targetFloorBox,
             player = player,
             gameManager = this
-        }.Run(board1, gameState);
+        }.Run(board.text, gameState);
     }
 
     private void Update()
