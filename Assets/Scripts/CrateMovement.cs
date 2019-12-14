@@ -10,7 +10,7 @@ public class CrateMovement : MonoBehaviour
 
     private float speed = 1.0f;
     private bool performingAction = false;
-    private Vector3Int target;
+    private Vector3 target;
 
     void Update()
     {
@@ -20,9 +20,15 @@ public class CrateMovement : MonoBehaviour
         }
     }
 
-    public void StartMovement(Vector3Int target)
+    public void StartMovement(Vector2Int target)
     {
-        this.target = target;
+        this.target = new Vector3(
+            target[1],
+            transform.position.y,
+            target[0]
+        );
+
+        Debug.Log("target: " + this.target);
         performingAction = true;
     }
 

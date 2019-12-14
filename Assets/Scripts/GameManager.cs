@@ -133,11 +133,30 @@ public class GameManager : MonoBehaviour
             Move(target, "walking");
         } else if (targetType == CellType.Crate)
         {
-            Move(target, "pushing");
-            // check if next field is free
-        }
+            Vector3Int playerPosition = new Vector3Int(
+                gameState.playerPosition[1],
+                0,
+                gameState.playerPosition[0]
+            );
 
-        
-        // TODO
+            Vector3Int direction = target - playerPosition;
+            Vector3Int nextPosition = target + direction;
+            var nextCellType = gameState.mapData[
+                nextPosition.z, nextPosition.x].type;
+
+            if (nextCellType == CellType.Floor || nextCellType == CellType.TargetSpot)
+            {
+                // move crate
+                var crateInstance = gameState.mapData[target.z, target.x].item;
+                var crateMovement = crateInstance.GetComponent<CrateMovement>();
+
+                crateMovement.StartMovement(new Vector2Int(
+                    nextPosition.z, nextPosition.x
+                ));
+
+                // move player
+                Move(target, "pushing");
+            }
+        }
     }
 }

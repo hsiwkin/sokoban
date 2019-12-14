@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private float speed = 1.0f;
     private bool performingAction = false;
     private string activityType;
-    Vector3Int target;
+    private Vector3Int target;
 
     private Animator animator;
 
@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
         else // vertical movement
         {
             float directionSign = -1 *
-                Mathf.Sign(transform.position.x - target.x);
+                Mathf.Sign(transform.position.z - target.z);
 
             transform.eulerAngles = new Vector3(
                 transform.eulerAngles.x,
