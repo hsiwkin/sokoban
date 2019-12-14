@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target;
+    public float smoothSpeed = 0.125f;
+    public Vector3 offset, rotation;
+
     private GameState gameState;
 
     private void Awake()
@@ -12,12 +14,25 @@ public class CameraController : MonoBehaviour
         gameState = GameState.Instance;
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
-        transform.position = new Vector3(
-            gameState.playerPosition.y,
-            5,
-            gameState.playerPosition.x
+        Vector3 desiredPosition = getPlayer().transform.position + offset;
+        Vector3 smoothedPosition = Vector3.Lerp(
+            transform.position,
+            desiredPosition,
+            smoothSpeed * 10 * Time.deltaTime
         );
+
+        transform.position = smoothedPosition;
+        transform.LookAt(getPlayer().transform);
+        //transform.eulerAngles = rotation;
+    }
+
+    private GameObject getPlayer()
+    {
+        return gameState.mapData[
+            gameState.playerPosition[0],
+            gameState.playerPosition[1]
+        ].item;
     }
 }
