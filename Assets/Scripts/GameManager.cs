@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public Transform mainCamera;
     private GameState gameState;
 
-    private bool performingAction = false;
+    private bool performingAction;
 
     private void Awake()
     {
@@ -48,14 +48,15 @@ public class GameManager : MonoBehaviour
 
     private void HandleInput()
     {
-        if (AnyInput())
+        Vector3Int? target = GetNewTargetField();
+
+        if (target.HasValue)
         {
-            Vector3Int target = GetNewTargetField();
-            Move(target);
+            Trafficer(target.Value);
         }
     }
 
-    private void Move(Vector3Int target)
+    private void Move(Vector3Int target, string activityType)
     {
         performingAction = true;
         
@@ -71,25 +72,32 @@ public class GameManager : MonoBehaviour
         playerMovementComponent.MovementFinish +=
             (object source, System.EventArgs args) => performingAction = false;
 
-        playerMovementComponent.StartMovement(target);
+        playerMovementComponent.StartMovement(target, activityType);
     }
 
-    private Vector3Int GetNewTargetField()
+    private Vector3Int? GetNewTargetField()
     {
         var verticalInput = Input.GetAxis("Vertical");
         var horizontalInput = Input.GetAxis("Horizontal");
 
-        return new Vector3Int(
-            gameState.playerPosition[1] + System.Math.Sign(horizontalInput),
-            0,
-            gameState.playerPosition[0] + System.Math.Sign(verticalInput)
-        );
-    }
-
-    private bool AnyInput()
-    {
-        return System.Math.Abs(Input.GetAxis("Vertical")) > Mathf.Epsilon ||
-            Mathf.Abs(Input.GetAxis("Horizontal")) > Mathf.Epsilon;
+        if (Mathf.Abs(verticalInput) > Mathf.Epsilon)
+        {
+            return new Vector3Int(
+                gameState.playerPosition[1],
+                0,
+                gameState.playerPosition[0] + System.Math.Sign(verticalInput)
+            );
+        } else if (Mathf.Abs(horizontalInput) > Mathf.Epsilon)
+        {
+            return new Vector3Int(
+                gameState.playerPosition[1] + System.Math.Sign(horizontalInput),
+                0,
+                gameState.playerPosition[0] 
+             );
+        } else
+        {
+            return null;
+        }
     }
 
     private void UpdatePlayerPosition(Vector3Int target)
@@ -107,12 +115,29 @@ public class GameManager : MonoBehaviour
                 gameState.playerPosition[0],
                 gameState.playerPosition[1]
             ];
-
         
         newField.type = CellType.Player;
         newField.item = oldField.item;
 
         oldField.type = CellType.Floor;
         oldField.item = null;
+    }
+
+    private void Trafficer(Vector3Int target)
+    {
+        var targetType = gameState.mapData[target.z, target.x].type;
+
+        // Free space
+        if (targetType == CellType.Floor || targetType == CellType.TargetSpot)
+        {
+            Move(target, "walking");
+        } else if (targetType == CellType.Crate)
+        {
+            Move(target, "pushing");
+            // check if next field is free
+        }
+
+        
+        // TODO
     }
 }

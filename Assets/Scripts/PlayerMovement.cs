@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float speed = 1.0f;
     private bool performingAction = false;
+    private string activityType;
     Vector3Int target;
 
     private Animator animator;
@@ -28,11 +29,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void StartMovement(Vector3Int target)
+    public void StartMovement(Vector3Int target, string activityType)
     {
         this.target = target;
+        this.activityType = activityType;
         performingAction = true;
-        animator.SetBool("walking", true);
+        animator.SetBool(this.activityType, true);
 
         RotatePlayer();
     }
@@ -46,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         {
             performingAction = false;
             OnMovementFinish();
-            animator.SetBool("walking", false);
+            animator.SetBool(this.activityType, false);
         }
     }
 
